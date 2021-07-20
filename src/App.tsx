@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
-import './App.css'
+import './App.scss'
+import { TableView } from './Components/TableView';
+import { Game } from './controllers/Game';
 
 function App() {
+  let [table, setTable] = useState(Game.GenTable());
+
   return (
-    <div className="App">
-      Hello World
-    </div>
+    <>
+      <TableView table={table} setTable={setTable} />
+    </>
   )
 }
 
