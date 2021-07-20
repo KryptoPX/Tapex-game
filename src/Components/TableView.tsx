@@ -1,4 +1,5 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
+import { Game } from '../controllers/Game'
 import { Block } from '../types/Block'
 import { BlockView } from './BlockView'
 
@@ -8,6 +9,11 @@ interface ITableView {
 }
 
 export const TableView: FC<ITableView> = ({ table, setTable }) => {
+
+    useEffect(() => {
+        setTable(Game.applyGravity(table))
+    }, [])
+    
     return (
         <>
             <table>
