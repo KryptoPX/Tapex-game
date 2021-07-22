@@ -8,7 +8,8 @@ function App() {
 
   return (
     <>
-      <TableView table={table} setTable={setTable} />
+      <TableView table={table} setTable={setTable}  />
+      <button onClick={() => setTable(Game.GenTable())}>New Table</button>
     </>
   )
 }
