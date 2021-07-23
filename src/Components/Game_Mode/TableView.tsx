@@ -8,34 +8,48 @@ import { BlockView } from './BlockView'
 interface ITableView {
     table: Block[][],
     setTable: React.Dispatch<React.SetStateAction<Block[][]>>
+    history: Block[][][],
+    setHistory: React.Dispatch<React.SetStateAction<Block[][][]>>
 }
 
-export const TableView: FC<ITableView> = ({ table, setTable }) => {
+export const TableView: FC<ITableView> = ({ table, setTable, history, setHistory }) => {
     let [patterns, setPatterns] = useState(new Array<Array<Coordinate>>())
-    
+
     useEffect(() => {
-        setTable([...table])
-        setPatterns([...patterns])
+        setTable(Game.applyGravity([...table]))
+
     }, [])
 
     useEffect(() => {
         if (patterns.length != 0) {
             let newTB = [...table]
-            newTB.forEach(t => t.forEach(t => t.iluminate = false))
+            let newHistory = [...history]
+
+            //patterns.forEach(t => t.forEach(t => newTB[t.y][t.x].iluminate = true))
+            //setHistory([...history, newTB])
+
             patterns.forEach(t => t.forEach(t => newTB[t.y][t.x] = new Block(BlockType.null, 0)))
             setTable(newTB);
         }
     }, [patterns])
 
     useEffect(() => {
-        let newTB = Game.applyGravity(table)
-        const isSameTable = newTB.every((t, y) => t.every((t, x) => table[y][x].value == t.value))
-        if (!isSameTable) {
+        let newTB = Game.applyGravity([...table])
+
+        if (!newTB.every((t, y) => t.every((t, x) => table[y][x].value == t.value))) {
             const newPatterns = FindPatterns(newTB)
+            RegisterHistory([...newTB])
             setTable(newTB)
             setPatterns(newPatterns)
         }
     }, [table])
+
+    const RegisterHistory = (tb: Block[][]) => {
+        let newHistory = [...history]
+        let newTB = Game.applyGravity(tb)
+        newHistory.push(newTB)
+        setHistory(newHistory)
+    }
 
     return (
         <table>
