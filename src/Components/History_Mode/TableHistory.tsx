@@ -16,7 +16,10 @@ export const TableHistory: FC<ITableView> = ({ history }) => {
 
     useEffect(()=> {
         let newTable = [...history[page]]
+        // ! Not optimized ! //
+        newTable.forEach(t => t.forEach(t => t.iluminate = false))
         FindPatterns(newTable).forEach(t => t.forEach(t => newTable[t.y][t.x].iluminate = true))
+        // ! //
         setTable(newTable)
     }, [page])
 
